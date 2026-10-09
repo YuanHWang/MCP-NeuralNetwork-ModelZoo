@@ -56,15 +56,39 @@ Five network types are implemented:
 
 | Network type | Paper notation | Input distribution | Output aggregation |
 | --- | --- | --- | --- |
-| Distributed-Input | $MN^{DI}(N_1)$ | Positive weights constrained to sum to 1 | Sum of all nodal outputs |
-| Distributed-State | $MN^{DS}(N_1)$ | Unity input to every node | Positive weights constrained to sum to 1 |
-| Distributed-Input-Relaxed | $MN^{DIR}(N_1)$ | Positive weights not constrained to sum to 1 | Sum of all nodal outputs |
-| Distributed-State-Relaxed | $MN^{DSR}(N_1)$ | Unity input to every node | Positive weights not constrained to sum to 1 |
-| Machine-Learning Benchmark | $MN^{MLB}(N_1)$ | Unconstrained linear mapping with bias | Unconstrained linear mapping with bias |
+| Distributed-Input | \(MN^{DI}(N_1)\) | Positive weights constrained to sum to 1 | Sum of all nodal outputs |
+| Distributed-State | \(MN^{DS}(N_1)\) | Unity input to every node | Positive weights constrained to sum to 1 |
+| Distributed-Input-Relaxed | \(MN^{DIR}(N_1)\) | Positive weights not constrained to sum to 1 | Sum of all nodal outputs |
+| Distributed-State-Relaxed | \(MN^{DSR}(N_1)\) | Unity input to every node | Positive weights not constrained to sum to 1 |
+| Machine-Learning Benchmark | \(MN^{MLB}(N_1)\) | Unconstrained linear mapping with bias | Unconstrained linear mapping with bias |
 
 In the **Distributed-Input (DI)** formulation, precipitation is partitioned among the parallel MCP nodes using positive weights that sum to one, while the resulting nodal streamflow components are summed to obtain total streamflow. In contrast, the **Distributed-State (DS)** formulation sends the full precipitation input to every node and combines the resulting streamflow components using positive output weights that sum to one.
 
 The **DIR** and **DSR** formulations relax the corresponding input- and output-side network-level mass-conservation constraints, respectively. The **MLB** architecture provides the least constrained network-level benchmark by using unconstrained linear mappings with bias terms at both the input and output sides.
+
+### Number of Nodes
+
+The single-layer networks are denoted as
+
+\[
+MN^{\mathrm{Type}}_{\mathrm{Sharing}}(N_1),
+\]
+
+where \(N_1\) denotes the number of MCP nodes in the first hidden layer. Because the architectures considered in this section contain only one hidden layer, \(N_1\) is also the total number of parallel MCP nodes in the network.
+
+In the experiments reported in Wang & Gupta (2025), we evaluated:
+
+\[
+N_1 = 2,\ 3,\ 4,\ 5.
+\]
+
+For example,
+
+\[
+MN^{DS}_{None}(3)
+\]
+
+denotes a single-layer **Distributed-State** network with **three MCP nodes** and **no internal state information sharing**.
 
 ### Internal State Information Sharing
 
@@ -77,14 +101,32 @@ For each of the five network types, four information-sharing configurations are 
 | Sharing-Augmented Loss | `SAL` | States shared with the loss gate only |
 | Sharing-Augmented Loss and Output | `SALO` | States shared with both output and loss gates |
 
-Combining the five network types with the four information-sharing configurations gives **20 single-layer architectural variants**. For example,
+Combining the five network types with the four information-sharing configurations gives **20 single-layer architectural variants** for each value of \(N_1\).
 
-- $MN^{DS}_{None}(N_1)$ denotes a Distributed-State network without information sharing.
-- $MN^{DS}_{SAO}(N_1)$ denotes a Distributed-State network with state information shared at the output gates.
-- $MN^{DS}_{SAL}(N_1)$ denotes a Distributed-State network with state information shared at the loss gates.
-- $MN^{DS}_{SALO}(N_1)$ denotes a Distributed-State network with state information shared at both the output and loss gates.
+Examples include:
+
+- \(MN^{DS}_{None}(N_1)\): Distributed-State with no information sharing
+- \(MN^{DS}_{SAO}(N_1)\): Distributed-State with state information shared at the output gates
+- \(MN^{DS}_{SAL}(N_1)\): Distributed-State with state information shared at the loss gates
+- \(MN^{DS}_{SALO}(N_1)\): Distributed-State with state information shared at both the output and loss gates
 
 The same `None`, `SAO`, `SAL`, and `SALO` convention is used for the DI, DIR, DSR, and MLB network families.
+
+### Single-Layer Model Space
+
+The complete single-layer model space therefore consists of:
+
+- 5 network types: `DI`, `DS`, `DIR`, `DSR`, and `MLB`
+- 4 information-sharing options: `None`, `SAO`, `SAL`, and `SALO`
+- 4 network sizes: \(N_1 = 2, 3, 4, 5\)
+
+This gives a total of:
+
+\[
+5 \times 4 \times 4 = 80
+\]
+
+single-layer model configurations.
 
 ### Running a Single-Layer Case
 
@@ -94,10 +136,6 @@ For example, to run the **MLB network without internal state sharing**, use:
 
 ```bash
 python train_MLB_None_single_layer.py
-
-
-
-
 
 ## References & Citation
 
@@ -113,3 +151,7 @@ Readers should consult the original paper for the formal model names, notation, 
 This repository provides a consolidated and reproducible collection of MCP neural network variants, including cleaned training and evaluation scripts, checkpoints, and data conventions. 
 
 For questions or suggestions, please contact **Yuan-Heng Wang, Ph.D.** at `yhwang0730@gmail.com` or `yhwang0730@arizona.edu`.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
