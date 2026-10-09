@@ -40,7 +40,7 @@ Pretrained Leaf River checkpoints are included in the model folders. They can be
 
 
 
-## References
+## References & Citation
 
 Readers should consult the original paper for the formal model names, notation, and mathematical definitions associated with each MCP variant.
 
