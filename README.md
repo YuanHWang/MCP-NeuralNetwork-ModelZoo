@@ -47,7 +47,7 @@ Readers should consult the original paper for the formal model names, notation, 
 - Full article: [Wang & Gupta (2025)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2025WR040178)
 - DOI: [10.1029/2025WR040178](https://doi.org/10.1029/2025WR040178)
 
-> Wang, Y.-H., & Gupta, H. V. (2025). Using machine learning to discover parsimonious and physically‐interpretable representations of catchment‐scale rainfall‐runoff dynamics. *Water Resources Research, 60*(10), e2025WR040178. https://doi.org/10.1029/2025WR040178
+> Wang, Y.-H., & Gupta, H. V. (2025). Using machine learning to discover parsimonious and physically‐interpretable representations of catchment‐scale rainfall‐runoff dynamics. *Water Resources Research, 61*(12), e2025WR040178. https://doi.org/10.1029/2025WR040178
 
 ## Contact
 
