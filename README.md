@@ -56,11 +56,11 @@ Five network types are implemented:
 
 | Network type | Paper notation | Input distribution | Output aggregation |
 | --- | --- | --- | --- |
-| Distributed-Input | $MN^{DI}(N_1)$ | Positive weights constrained to sum to 1 | Sum of all nodal outputs |
-| Distributed-State | $MN^{DS}(N_1)$ | Unity input to every node | Positive weights constrained to sum to 1 |
-| Distributed-Input-Relaxed | $MN^{DIR}(N_1)$ | Positive weights not constrained to sum to 1 | Sum of all nodal outputs |
-| Distributed-State-Relaxed | $MN^{DSR}(N_1)$ | Unity input to every node | Positive weights not constrained to sum to 1 |
-| Machine-Learning Benchmark | $MN^{MLB}(N_1)$ | Unconstrained linear mapping with bias | Unconstrained linear mapping with bias |
+| Distributed-Input | MN<sup>DI</sup>(N<sub>1</sub>) | Positive weights constrained to sum to 1 | Sum of all nodal outputs |
+| Distributed-State | MN<sup>DS</sup>(N<sub>1</sub>) | Unity input to every node | Positive weights constrained to sum to 1 |
+| Distributed-Input-Relaxed | MN<sup>DIR</sup>(N<sub>1</sub>) | Positive weights not constrained to sum to 1 | Sum of all nodal outputs |
+| Distributed-State-Relaxed | MN<sup>DSR</sup>(N<sub>1</sub>) | Unity input to every node | Positive weights not constrained to sum to 1 |
+| Machine-Learning Benchmark | MN<sup>MLB</sup>(N<sub>1</sub>) | Unconstrained linear mapping with bias | Unconstrained linear mapping with bias |
 
 In the **Distributed-Input (DI)** formulation, precipitation is partitioned among the parallel MCP nodes using positive weights that sum to one, while the resulting nodal streamflow components are summed to obtain total streamflow. In contrast, the **Distributed-State (DS)** formulation sends the full precipitation input to every node and combines the resulting streamflow components using positive output weights that sum to one.
 
