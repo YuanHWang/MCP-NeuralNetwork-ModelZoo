@@ -1,6 +1,12 @@
 ## Mass-Conserving Perceptron (MCP) Neural Network Model Zoo
 
-This repository provides a curated and documented implementation of the neural-network architectures developed in Wang & Gupta (2025), all built around the mass-conserving perceptron (MCP) as the fundamental computational unit, as illustrated in ![Figure 1. MCP-based neural-network architectures.](Figure1.png). The original research code was archived at [Zenodo](https://doi.org/10.5281/zenodo.15811866); the version presented here has been subsequently streamlined, refactored, and reorganized for improved readability, reproducibility, and reuse, with assistance from OpenAI's ChatGPT (GPT-6.1 Sol, Max intelligence mode).
+This repository provides a curated and documented implementation of the neural-network architectures developed in Wang & Gupta (2025), all built around the mass-conserving perceptron (MCP) as the fundamental computational unit, as illustrated in Figure 1.
+
+![MCP-based neural-network architecture](Figure1.png)
+
+*Figure 1. A neural-network architecture built from mass-conserving perceptrons.*
+
+The original research code was archived at [Zenodo](https://doi.org/10.5281/zenodo.15811866); the version presented here has been subsequently streamlined, refactored, and reorganized for improved readability, reproducibility, and reuse, with assistance from OpenAI's ChatGPT (GPT-6.1 Sol, Max intelligence mode).
 
 Note that this repository includes only the results for the Leaf River Basin and is intended primarily for pedagogical and demonstration purposes. Users interested in reproducing or extending the analyses to the CAMELS-US catchments are encouraged to follow the methodology described in Wang & Gupta (2025) and use the scripts provided in the original [Zenodo](https://doi.org/10.5281/zenodo.15811866).
 
