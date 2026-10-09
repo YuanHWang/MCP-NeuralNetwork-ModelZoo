@@ -264,6 +264,7 @@ def main():
         model,
         init_checkpoint,
         args.hidden_size,
+        device,
     )
 
     optimizer = torch.optim.Adam(model.parameters(), lr=0.025)
