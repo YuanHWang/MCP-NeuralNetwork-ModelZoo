@@ -162,15 +162,38 @@ Three forms of inter-layer and output transformation are investigated, together 
 
 ### Multi-Layer Model Families
 
-| Repository folder | Paper notation | Inter-layer / output mapping | Information sharing |
+| Repository folder | Paper notation | Mapping | Sharing |
 | --- | --- | --- | --- |
-| `MassConserved` | `MN^DS_None(N1,N2,N3)` | Mass-conserving mappings | None |
-| `MassConserved-InfoShared` | `MN^DS_SALO(N1,N2,N3)` | Mass-conserving mappings | Output and loss gates |
-| `MassRelaxed` | `MN^DSR_None(N1,N2,N3)` | Positive, mass-relaxed mappings | None |
-| `MassRelaxed-InfoShared` | `MN^DSR_SALO(N1,N2,N3)` | Positive, mass-relaxed mappings | Output and loss gates |
-| `ML` | `MN^(DS-MLB)_None(N1,N2,N3)` | Unconstrained affine mappings | None |
-| `ML-InfoShared` | `MN^(DS-MLB)_SALO(N1,N2,N3)` | Unconstrained affine mappings | Output and loss gates |
-The first three folders correspond to the non-information-sharing multi-layer networks summarized in **Figure 5** of Wang & Gupta (2025). The three `InfoShared` folders correspond to the multi-layer **Sharing-Augmented Loss and Output (SALO)** networks summarized in **Figure 9**.
+| `MassConserved` | `MN^DS_None(N1,N2,N3)` | Mass-conserving | None |
+| `MassConserved-InfoShared` | `MN^DS_SALO(N1,N2,N3)` | Mass-conserving | Output + loss gates |
+| `MassRelaxed` | `MN^DSR_None(N1,N2,N3)` | Positive, mass-relaxed | None |
+| `MassRelaxed-InfoShared` | `MN^DSR_SALO(N1,N2,N3)` | Positive, mass-relaxed | Output + loss gates |
+| `ML` | `MN^DS-MLB_None(N1,N2,N3)` | Unconstrained affine | None |
+| `ML-InfoShared` | `MN^DS-MLB_SALO(N1,N2,N3)` | Unconstrained affine | Output + loss gates |
+
+The non-information-sharing folders — `MassConserved`, `MassRelaxed`, and `ML` — correspond to the multi-layer networks summarized in **Figure 5** of Wang & Gupta (2025).
+
+Their information-sharing counterparts — `MassConserved-InfoShared`, `MassRelaxed-InfoShared`, and `ML-InfoShared` — correspond to the multi-layer **Sharing-Augmented Loss and Output (SALO)** networks summarized in **Figure 9**.
+
+Using the formal notation of Wang & Gupta (2025), these model families are written as:
+
+$$
+MN^{DS}_{None}(N_1,N_2,N_3)
+\qquad
+MN^{DS}_{SALO}(N_1,N_2,N_3)
+$$
+
+$$
+MN^{DSR}_{None}(N_1,N_2,N_3)
+\qquad
+MN^{DSR}_{SALO}(N_1,N_2,N_3)
+$$
+
+$$
+MN^{DS-MLB}_{None}(N_1,N_2,N_3)
+\qquad
+MN^{DS-MLB}_{SALO}(N_1,N_2,N_3)
+$$
 
 For the multi-layer experiments, information sharing is applied to both the output and loss gates. Importantly, information sharing is **layer-wise**: each node can access the cell states of other nodes within the **same layer**, but information is not directly shared across different hidden layers.
 
