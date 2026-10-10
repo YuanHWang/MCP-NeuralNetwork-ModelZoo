@@ -6,7 +6,7 @@ This repository provides a curated and documented implementation of the neural-n
 
 *Figure 1. A neural-network architecture built from mass-conserving perceptrons.*
 
-The original research code was archived at [Zenodo](https://doi.org/10.5281/zenodo.15811866); the version presented here has been subsequently streamlined, refactored, and reorganized for improved readability, reproducibility, and reuse, with assistance from OpenAI's ChatGPT (GPT-6.1 Sol, Max intelligence mode).
+The original research code was archived at [Zenodo](https://doi.org/10.5281/zenodo.15811866); the version presented here has since been streamlined, refactored, and reorganized for improved readability, reproducibility, and reuse, with assistance from OpenAI's ChatGPT (GPT-6.1 Sol, Max intelligence mode).
 
 Note that this repository includes only the results for the Leaf River Basin and is intended primarily for pedagogical and demonstration purposes. Users interested in reproducing or extending the analyses to the CAMELS-US catchments are encouraged to follow the methodology described in Wang & Gupta (2025) and use the scripts provided in the original [Zenodo](https://doi.org/10.5281/zenodo.15811866).
 
@@ -166,38 +166,64 @@ Three forms of inter-layer and output transformation are investigated, together 
 
 ### Multi-Layer Model Families
 
-| Repository folder | Paper notation | Mapping | Sharing |
-| --- | --- | --- | --- |
-| `MassConserved` | `MN^DS_None(N1,N2,N3)` | Mass-conserving | None |
-| `MassConserved-InfoShared` | `MN^DS_SALO(N1,N2,N3)` | Mass-conserving | Output + loss gates |
-| `MassRelaxed` | `MN^DSR_None(N1,N2,N3)` | Positive, mass-relaxed | None |
-| `MassRelaxed-InfoShared` | `MN^DSR_SALO(N1,N2,N3)` | Positive, mass-relaxed | Output + loss gates |
-| `ML` | `MN^DS-MLB_None(N1,N2,N3)` | Unconstrained affine | None |
-| `ML-InfoShared` | `MN^DS-MLB_SALO(N1,N2,N3)` | Unconstrained affine | Output + loss gates |
+The six multi-layer model families are organized as follows:
 
-In the table above, the **1st, 3rd, and 5th folders** — `MassConserved`, `MassRelaxed`, and `ML` — correspond to the **non-information-sharing** multi-layer networks summarized in **Figure 5** of Wang & Gupta (2025).
+| No. | Repository folder | Network family | Mapping | Information sharing |
+| ---: | --- | --- | --- | --- |
+| 1 | `MassConserved` | Distributed-State | Mass-conserving | None |
+| 2 | `MassConserved-InfoShared` | Distributed-State | Mass-conserving | Output + loss gates |
+| 3 | `MassRelaxed` | Distributed-State-Relaxed | Positive, mass-relaxed | None |
+| 4 | `MassRelaxed-InfoShared` | Distributed-State-Relaxed | Positive, mass-relaxed | Output + loss gates |
+| 5 | `ML` | Distributed-State Machine-Learning Benchmark | Unconstrained affine | None |
+| 6 | `ML-InfoShared` | Distributed-State Machine-Learning Benchmark | Unconstrained affine | Output + loss gates |
 
-The **2nd, 4th, and 6th folders** — `MassConserved-InfoShared`, `MassRelaxed-InfoShared`, and `ML-InfoShared` — correspond to the multi-layer **Sharing-Augmented Loss and Output (SALO)** networks summarized in **Figure 9**.
-
-Using the formal notation of Wang & Gupta (2025), the six model families are:
+The **1st, 3rd, and 5th model families** are the non-information-sharing multi-layer networks summarized in **Figure 5** of Wang & Gupta (2025):
 
 $$
 MN^{DS}_{None}(N_1,N_2,N_3)
-\qquad
-MN^{DS}_{SALO}(N_1,N_2,N_3)
 $$
 
 $$
 MN^{DSR}_{None}(N_1,N_2,N_3)
-\qquad
-MN^{DSR}_{SALO}(N_1,N_2,N_3)
 $$
 
 $$
 MN^{DS-MLB}_{None}(N_1,N_2,N_3)
-\qquad
+$$
+
+The **2nd, 4th, and 6th model families** are their corresponding **Sharing-Augmented Loss and Output (SALO)** variants summarized in **Figure 9**:
+
+$$
+MN^{DS}_{SALO}(N_1,N_2,N_3)
+$$
+
+$$
+MN^{DSR}_{SALO}(N_1,N_2,N_3)
+$$
+
+$$
 MN^{DS-MLB}_{SALO}(N_1,N_2,N_3)
 $$
+
+The correspondence between the repository folders and the formal paper notation is therefore:
+
+1. **`MassConserved`**  
+   $MN^{DS}_{None}(N_1,N_2,N_3)$
+
+2. **`MassConserved-InfoShared`**  
+   $MN^{DS}_{SALO}(N_1,N_2,N_3)$
+
+3. **`MassRelaxed`**  
+   $MN^{DSR}_{None}(N_1,N_2,N_3)$
+
+4. **`MassRelaxed-InfoShared`**  
+   $MN^{DSR}_{SALO}(N_1,N_2,N_3)$
+
+5. **`ML`**  
+   $MN^{DS-MLB}_{None}(N_1,N_2,N_3)$
+
+6. **`ML-InfoShared`**  
+   $MN^{DS-MLB}_{SALO}(N_1,N_2,N_3)$
 
 For the multi-layer experiments, information sharing is applied to both the output and loss gates. Importantly, information sharing is **layer-wise**: each node can access the cell states of other nodes within the **same layer**, but information is not directly shared across different hidden layers.
 
@@ -215,13 +241,7 @@ where:
 - $N_2$ is the number of MCP nodes in the second hidden layer,
 - $N_3$ is the number of MCP nodes in the third hidden layer.
 
-The corresponding repository folder uses the compact notation:
-
-```text
-Lxyz
-```
-
-where `x`, `y`, and `z` represent $N_1$, $N_2$, and $N_3$, respectively.
+The corresponding repository folder uses the compact notation `Lxyz`, where `x`, `y`, and `z` represent $N_1$, $N_2$, and $N_3$, respectively.
 
 For example:
 
@@ -387,14 +407,177 @@ The evaluation scripts report model skill for the spin-up, training, selection, 
 
 ---
 
+## Physical-Conceptual MA3–MA6 Models with SALO State Sharing
+
+The `MA-Sharing/` directory contains information-sharing extensions of four physical-conceptual MCP architectures — **MA3, MA4, MA5, and MA6** — originally introduced and evaluated in our previous study, Wang & Gupta (2024), *Towards Interpretable Physical-Conceptual Catchment-Scale Hydrological Modeling Using the Mass-Conserving-Perceptron*.
+
+In that earlier work, MA3–MA6 were developed as progressively more complex architectural hypotheses for representing catchment-scale rainfall-runoff dynamics using physically interpretable and mass-conserving MCP units. The architectures differ in how cell states and runoff pathways are organized, ranging from serial soil-moisture/routing representations to structures containing parallel surface, groundwater, channel-routing, and overland-flow pathways.
+
+Building on the cell-state information-sharing framework explored in Wang & Gupta (2025), the implementations provided here augment these original physical-conceptual architectures by allowing gating functions to use information from other internal cell states.
+
+### Base MA3–MA6 Architectures
+
+The four architectures differ primarily in the number of cell states and the organization of the associated runoff pathways:
+
+| Model | Main architectural hypothesis |
+| --- | --- |
+| `MA3` | One flow pathway with two cell states in series: a catchment soil-moisture storage followed by a routing storage |
+| `MA4` | Two parallel flow pathways representing near-surface runoff and groundwater/baseflow |
+| `MA5` | Three cell states and two flow pathways, extending MA4 by including explicit surface/channel routing |
+| `MA6` | Extends MA5 by including an additional overland-flow pathway that can route water directly toward the catchment outlet |
+
+All four architectures retain the physically interpretable storage and flow-path structures developed in Wang & Gupta (2024).
+
+### SALO State Sharing
+
+The versions included in this repository augment the original MA3–MA6 architectures with **Sharing-Augmented Loss and Output (SALO)** gates.
+
+In the original physical-conceptual formulations, the gating behavior associated with a given MCP state is primarily determined using information local to that state.
+
+In the SALO extensions, both the **output gate** and the **loss gate** are additionally allowed to use information from other cell states in the model.
+
+Conceptually:
+
+```text
+Original MA model:
+
+state i
+  ├── output gate <- local state information
+  └── loss gate   <- local state information
+
+
+MA-SALO model:
+
+state i
+  ├── output gate <- local state + information from other cell states
+  └── loss gate   <- local state + information from other cell states
+```
+
+The underlying MA3–MA6 storage and flow-path architectures are retained. The modification concerns the information available to the gating functions rather than the introduction of new hydrologic states or new flow pathways.
+
+This provides a direct way to investigate whether fluxes associated with an individual conceptual storage should depend only on its local state or on a broader representation of the moisture distribution across the model.
+
+### Available MA-SALO Cases
+
+Four SALO physical-conceptual cases are included:
+
+| Repository folder | Base architecture | Information sharing |
+| --- | --- | --- |
+| `MA3-SALO` | MA3 | Output + loss gates |
+| `MA4-SALO` | MA4 | Output + loss gates |
+| `MA5-SALO` | MA5 | Output + loss gates |
+| `MA6-SALO` | MA6 | Output + loss gates |
+
+The directory is organized as:
+
+```text
+MA-Sharing/
+├── MA3-SALO/
+├── MA4-SALO/
+├── MA5-SALO/
+└── MA6-SALO/
+```
+
+Each case contains a pretrained Leaf River checkpoint together with its corresponding training and evaluation scripts.
+
+For example, the MA6-SALO directory is organized as:
+
+```text
+MA-Sharing/
+└── MA6-SALO/
+    ├── model_epoch8.pt
+    ├── train_MA6_SALO.py
+    └── evaluate_MA6_SALO.py
+```
+
+The exact checkpoint filename may differ among the four cases because each architecture retains its corresponding pretrained model.
+
+### Running an MA-SALO Case
+
+For example, to evaluate the pretrained **MA6-SALO** model:
+
+```bash
+cd MA-Sharing/MA6-SALO
+python evaluate_MA6_SALO.py
+```
+
+To continue training from the checkpoint stored in the same directory:
+
+```bash
+python train_MA6_SALO.py
+```
+
+The same naming convention is used for the remaining architectures:
+
+```text
+MA3-SALO
+MA4-SALO
+MA5-SALO
+MA6-SALO
+```
+
+The evaluation scripts report model skill for the spin-up, training, selection, and testing periods and save the associated discharge, storage, routing, loss, and gate diagnostics.
+
+---
+
+# Pruning evaluator usage
+
+These scripts evaluate pretrained five-node DS networks without retraining or fine-tuning.
+
+The default pruning rule is to compute the learned DS output weights
+
+$$
+w_i = \frac{\exp(a_i)}{\sum_j \exp(a_j)}
+$$
+
+and prune progressively from the smallest learned output weight. The retained output weights are kept exactly at their pretrained values and are **not renormalized** after pruning.
+
+## Automatic smallest-weight pruning
+
+```bash
+python evaluate_Prune_Case1.py --prune_count 1
+python evaluate_Prune_Case2_FLOWPATH.py --prune_count 2
+python evaluate_Prune_Case2_FULL.py --prune_count 2
+```
+
+`--prune_count 1` removes the smallest learned flow-path weight; `--prune_count 2` removes the two smallest, and so on.
+
+## Manual pruning
+
+Readers can override the automatic ranking and select any paths directly using 1-based node IDs:
+
+```bash
+python evaluate_Prune_Case1.py --prune_nodes 2,4
+python evaluate_Prune_Case2_FLOWPATH.py --prune_nodes 2,4
+python evaluate_Prune_Case2_FULL.py --prune_nodes 2,4
+```
+
+## Interpretation
+
+- `Case1`: no state sharing; selected direct output flow paths are masked.
+- `Case2_FLOWPATH`: partial SALO pruning; selected direct output flow paths are masked, but the corresponding cell states remain active in the shared output/loss gates.
+- `Case2_FULL`: full SALO pruning; selected direct output flow paths are masked and the corresponding source-state interaction rows in `weight_b1_yom` and `weight_b1_ylm` are set to zero.
+
+The scripts print the learned output weights and their smallest-to-largest ranking at runtime, and save `metrics.csv`, `output_weights.csv`, `pruning_configuration.csv`, and time-series diagnostics.
+
+---
+
 ## References & Citation
 
-Readers should consult the original paper for the formal model names, notation, and mathematical definitions associated with each MCP variant.
+Readers should consult the original papers for the formal model names, notation, mathematical definitions, and development of the MCP-based physical-conceptual and neural-network architectures used in this repository.
+
+### Primary Repository Reference
 
 - Full article: [Wang & Gupta (2025)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2025WR040178)
 - DOI: [10.1029/2025WR040178](https://doi.org/10.1029/2025WR040178)
 
 > Wang, Y.-H., & Gupta, H. V. (2025). Using machine learning to discover parsimonious and physically-interpretable representations of catchment-scale rainfall-runoff dynamics. *Water Resources Research, 61*(12), e2025WR040178. https://doi.org/10.1029/2025WR040178
+
+### Physical-Conceptual MA Architecture Reference
+
+- DOI: [10.1029/2024WR037224](https://doi.org/10.1029/2024WR037224)
+
+> Wang, Y.-H., & Gupta, H. V. (2024). Towards interpretable physical-conceptual catchment-scale hydrological modeling using the mass-conserving-perceptron. *Water Resources Research, 60*(10), e2024WR037224. https://doi.org/10.1029/2024WR037224
 
 ---
 
