@@ -524,9 +524,9 @@ The evaluation scripts report model skill for the spin-up, training, selection, 
 
 The `Pruning/` directory contains the network-pruning experiments described in **Section 4.5 and Figure 13** of Wang & Gupta (2025).
 
-These experiments were designed to investigate whether the optimized five-node Distributed-State networks contain redundant flow pathways, and to determine how many distinct flow pathways and internal cell states are actually needed to retain predictive performance.
+The purpose of these experiments is to investigate the internal redundancy and functional importance of the flow pathways learned by the optimized five-node Distributed-State networks. Rather than training a new smaller network, pruning is performed directly on the already optimized five-node architecture to examine how predictive performance changes when selected learned components are removed.
 
-The pruning analysis starts from two optimized single-layer five-node networks:
+The pruning analysis is performed on two parent networks:
 
 $$
 MN^{DS}_{None}(5)
@@ -538,21 +538,21 @@ $$
 MN^{DS}_{SALO}(5)
 $$
 
-The first is a five-node Distributed-State network without cell-state information sharing, whereas the second uses **Sharing-Augmented Loss and Output (SALO)** gates.
+The first is the five-node Distributed-State network without cell-state information sharing, whereas the second incorporates **Sharing-Augmented Loss and Output (SALO)** gates.
 
-No additional training or fine-tuning is performed after pruning. Each experiment therefore evaluates the effect of removing components from an already optimized five-node network.
+Importantly, **no retraining, fine-tuning, weight redistribution, or output-weight renormalization is performed after pruning**. The experiments therefore represent direct ablation tests of the learned network.
 
 ### Three Pruning Experiments
 
-Three distinct pruning experiments are provided:
+Three related pruning experiments are included:
 
-| Script | Parent network | Pruning type | Figure |
+| Evaluation script | Parent network | Pruning interpretation | Figure |
 | --- | --- | --- | --- |
-| `evaluate_Prune_Case1.py` | $MN^{DS}_{None}(5)$ | Non-sharing node / output-path pruning | Figure 13b |
-| `evaluate_Prune_Case2_FLOWPATH.py` | $MN^{DS}_{SALO}(5)$ | Partial SALO pruning: output flow path only | Figure 13d |
-| `evaluate_Prune_Case2_FULL.py` | $MN^{DS}_{SALO}(5)$ | Full SALO pruning: output path + shared-state influence | Figure 13e |
+| `evaluate_Prune_Case1.py` | $MN^{DS}_{None}(5)$ | Remove selected output flow paths from the non-sharing network | Figure 13b |
+| `evaluate_Prune_Case2_FLOWPATH.py` | $MN^{DS}_{SALO}(5)$ | Partial pruning `(P)`: remove output flow paths while retaining the associated cell states and their shared information | Figure 13d |
+| `evaluate_Prune_Case2_FULL.py` | $MN^{DS}_{SALO}(5)$ | Full pruning `(F)`: remove output flow paths and the associated cell-state influence on the remaining SALO gates | Figure 13e |
 
-### Case 1: Non-Sharing Network Pruning
+### Case 1: Pruning the Non-Sharing DS Network
 
 The first experiment starts from:
 
@@ -560,15 +560,15 @@ $$
 MN^{DS}_{None}(5)
 $$
 
-Because this network contains **no information sharing among cell states**, removing an output flow path also makes the corresponding node functionally irrelevant to the system output.
+and examines the effect of removing one to four of its five learned output flow pathways.
 
-The paper denotes these cases as:
+The pruning cases are denoted as:
 
 $$
 MN^{DS}_{None}(5)-D_k(P)
 $$
 
-where $k$ is the number of pruned flow paths and `P` denotes removal of the corresponding output **pathways**.
+where $k$ denotes the number of removed pathways and `(P)` indicates that the corresponding flow **paths** are removed from the network output.
 
 For example:
 
@@ -576,9 +576,11 @@ $$
 MN^{DS}_{None}(5)-D_1(P)
 $$
 
-represents the five-node non-sharing DS network after one of its five output flow paths has been removed.
+represents the optimized five-node non-sharing DS network after one of its five learned output pathways has been removed.
 
-### Case 2: SALO Partial Pruning
+Because there is no cell-state information sharing in this network, once a node's output pathway is removed, that node no longer has any influence on the predicted system discharge. It therefore becomes functionally irrelevant to the network output.
+
+### Case 2: Partial Pruning of the SALO Network
 
 The second experiment starts from:
 
@@ -586,82 +588,186 @@ $$
 MN^{DS}_{SALO}(5)
 $$
 
-and removes selected **output flow paths only**.
+and removes selected **output flow pathways only**.
 
 These cases are denoted as:
 
 $$
-MN^{DS}_{SALO}(5)-D_k(P)
+MN^{DS}_{SALO}(5)-D_k(P).
 $$
 
-Importantly, pruning an output pathway from a SALO network does **not** remove the corresponding cell state.
+The key distinction is that, in an information-sharing network, removing an output pathway does **not** necessarily mean removing the corresponding node.
 
-The pruned node:
+Under partial pruning:
 
-- no longer contributes directly to the system discharge through its output pathway,
-- remains dynamically active inside the model, and
-- continues to provide its cell-state information to the **output and loss gates of the retained nodes**.
+- the selected node's direct contribution to system discharge is removed,
+- its internal cell state remains dynamically active, and
+- its cell-state information continues to be available to the **output and loss gates of the retained nodes**.
 
 Conceptually:
 
 ```text
 Partial pruning (P)
 
-pruned state
-     │
-     ├── X output flow path removed
-     │
-     └── state information still shared
-             ↓
-       retained SALO gates
+pruned cell state
+       │
+       ├── X direct output flow path removed
+       │
+       └── cell-state information retained
+                    │
+                    ▼
+         output/loss gates of
+           retained SALO nodes
 ```
 
-This distinction makes it possible to investigate whether a cell state can remain useful as an internal information carrier even when its own direct streamflow pathway is removed.
+This experiment therefore tests whether a cell state can remain useful as an internal source of system information even when its own direct streamflow pathway is no longer included in the network output.
 
-### Case 2: SALO Full Pruning
+### Case 2: Full Pruning of the SALO Network
 
 The third experiment also starts from:
 
 $$
-MN^{DS}_{SALO}(5)
+MN^{DS}_{SALO}(5),
 $$
 
-but performs **full pruning**, denoted by `F`:
+but removes both the selected output pathway and the corresponding cell state's influence on the information-sharing gates.
+
+These cases are denoted as:
 
 $$
-MN^{DS}_{SALO}(5)-D_k(F)
+MN^{DS}_{SALO}(5)-D_k(F),
 $$
 
-In this case, both the selected output pathway and the corresponding cell state's influence on the SALO gates of the remaining nodes are removed.
+where `(F)` denotes **full removal**.
+
+Under full pruning:
+
+- the selected direct output flow pathway is removed, and
+- the corresponding cell-state information is no longer supplied to the output and loss gates of the retained nodes.
 
 Conceptually:
 
 ```text
 Full pruning (F)
 
-pruned state
-     │
-     ├── X output flow path removed
-     │
-     └── X shared-state influence removed
+pruned cell state
+       │
+       ├── X direct output flow path removed
+       │
+       └── X shared-state influence removed
 ```
 
-The pruned node therefore has neither a direct pathway to the system output nor an information-sharing influence on the retained nodes, making it functionally removed from the network.
+Thus, the distinction between partial and full pruning is:
 
-The distinction between partial and full pruning is therefore:
-
-| Pruning type | Output pathway | Cell state retained internally | State information shared with retained gates |
+| Pruning type | Direct output pathway | Cell state remains active | Shared-state influence on retained SALO gates |
 | --- | --- | --- | --- |
-| Partial `(P)` | Removed | Yes | Yes |
-| Full `(F)` | Removed | Functionally disconnected | No |
+| Partial `(P)` | Removed | Yes | Retained |
+| Full `(F)` | Removed | Functionally disconnected | Removed |
+
+The comparison between `(P)` and `(F)` therefore separates the value of a **direct flow pathway** from the value of the associated **cell state as an information source** for the rest of the network.
+
+### Fixed Learned Output Weights During Pruning
+
+The pruning experiments operate directly on the already optimized network. The learned output weights of the retained pathways therefore remain unchanged.
+
+For example, suppose three flow pathways have learned output weights:
+
+$$
+A=
+\frac{\exp(a)}
+{\exp(a)+\exp(b)+\exp(c)},
+$$
+
+$$
+B=
+\frac{\exp(b)}
+{\exp(a)+\exp(b)+\exp(c)},
+$$
+
+and
+
+$$
+C=
+\frac{\exp(c)}
+{\exp(a)+\exp(b)+\exp(c)}.
+$$
+
+The original network discharge is:
+
+$$
+Q
+=
+A Q_A
++
+B Q_B
++
+C Q_C.
+$$
+
+If pathway $C$ is pruned, its contribution is simply removed:
+
+$$
+Q_{\mathrm{pruned}}
+=
+A Q_A
++
+B Q_B.
+$$
+
+The retained coefficients $A$ and $B$ remain exactly as learned in the original optimized five-node network.
+
+They are **not** recomputed as:
+
+$$
+A'
+=
+\frac{\exp(a)}
+{\exp(a)+\exp(b)}
+$$
+
+and
+
+$$
+B'
+=
+\frac{\exp(b)}
+{\exp(a)+\exp(b)}.
+$$
+
+Consequently,
+
+$$
+A+B
+$$
+
+is not required to equal one after pathway $C$ has been removed.
+
+This behavior is intentional. The purpose of pruning is to measure the effect of removing learned flow pathways from the original optimized network, rather than constructing or re-optimizing a new smaller network.
+
+Accordingly, the pruning experiments involve:
+
+```text
+original optimized network
+        │
+        ▼
+freeze all learned parameters
+        │
+        ▼
+remove selected pathway contribution(s)
+        │
+        ▼
+evaluate resulting performance
+```
+
+There is **no retraining, no fine-tuning, no Softmax recomputation, and no compensation by the retained pathways**.
 
 ### Pruning Combinations
 
-Starting from five nodes, the experiments systematically remove between one and four pathways.
+Starting from five pathways, one to four pathways are systematically removed.
 
 The number of possible combinations is:
 
-| Number pruned | Number retained | Number of possible scenarios |
+| Number of pathways removed | Number of pathways retained | Number of possible combinations |
 | ---: | ---: | ---: |
 | 1 | 4 | 5 |
 | 2 | 3 | 10 |
@@ -671,36 +777,26 @@ The number of possible combinations is:
 Thus, each pruning experiment contains:
 
 $$
-5 + 10 + 10 + 5 = 30
+5+10+10+5=30
 $$
 
 possible pruning configurations.
 
-Across the three experiments, this corresponds to:
+The same set of 30 pathway combinations can be evaluated for:
 
-$$
-3 \times 30 = 90
-$$
+```text
+Case 1:     non-sharing pruning
+Case 2-P:   SALO partial pruning
+Case 2-F:   SALO full pruning
+```
 
-pruned configurations, in addition to the unpruned baseline cases.
+giving 30 candidate configurations for each experiment.
 
-In Wang & Gupta (2025), the best-performing configuration at each pruning level was identified according to median annual KGEss, without retraining the network after pruning.
+In Wang & Gupta (2025), for each pruning level, the configuration having the best median annual KGEss was selected for presentation in Figure 13. No retraining was performed after pruning.
 
-### Output-Weight Renormalization
+### Running the Pruning Experiments
 
-The Distributed-State network combines nodal discharge contributions using positive output weights constrained to sum to one.
-
-When one or more output pathways are pruned, their effective output weights are set to zero and the weights of the retained pathways are renormalized:
-
-$$
-\sum_{i \in \mathrm{retained}} w_i = 1
-$$
-
-This preserves the mass-conserving Distributed-State aggregation structure among the remaining output pathways.
-
-### Running a Pruning Experiment
-
-All three evaluation scripts use the same two primary arguments:
+The pruning evaluation scripts use two primary command-line arguments:
 
 ```text
 --prune
@@ -709,26 +805,8 @@ All three evaluation scripts use the same two primary arguments:
 
 where:
 
-- `--prune` specifies how many pathways are removed (`0` to `4`),
-- `--scenario` specifies which combination of pathways is removed.
-
-For example, to evaluate a non-sharing network with two pathways pruned using scenario 3:
-
-```bash
-python evaluate_Prune_Case1.py --prune 2 --scenario 3
-```
-
-To evaluate the corresponding **partial SALO pruning** experiment:
-
-```bash
-python evaluate_Prune_Case2_FLOWPATH.py --prune 2 --scenario 3
-```
-
-To evaluate the corresponding **full SALO pruning** experiment:
-
-```bash
-python evaluate_Prune_Case2_FULL.py --prune 2 --scenario 3
-```
+- `--prune` specifies the number of pathways to remove,
+- `--scenario` specifies which particular combination of pathways is removed.
 
 The valid numbers of scenarios are:
 
@@ -739,28 +817,88 @@ The valid numbers of scenarios are:
 --prune 4  -> scenarios 1–5
 ```
 
-The unpruned baseline can be evaluated using:
+The unpruned five-pathway baseline is represented by:
 
-```bash
-python evaluate_Prune_Case1.py --prune 0 --scenario 0
+```text
+--prune 0 --scenario 0
 ```
 
-and equivalently for the two SALO pruning scripts.
+### Example: Non-Sharing Pruning
+
+To evaluate a case in which two pathways are removed from the non-sharing five-node network using pruning scenario 3:
+
+```bash
+cd Pruning
+python evaluate_Prune_Case1.py --prune 2 --scenario 3
+```
+
+This corresponds to a member of the:
+
+$$
+MN^{DS}_{None}(5)-D_2(P)
+$$
+
+family of pruning experiments.
+
+### Example: SALO Partial Pruning
+
+To remove the same selected output pathways while retaining all five cell states as information sources:
+
+```bash
+python evaluate_Prune_Case2_FLOWPATH.py --prune 2 --scenario 3
+```
+
+This corresponds to:
+
+$$
+MN^{DS}_{SALO}(5)-D_2(P).
+$$
+
+Only the selected direct output pathways are removed.
+
+### Example: SALO Full Pruning
+
+To additionally remove the corresponding cell-state information from the SALO gates:
+
+```bash
+python evaluate_Prune_Case2_FULL.py --prune 2 --scenario 3
+```
+
+This corresponds to:
+
+$$
+MN^{DS}_{SALO}(5)-D_2(F).
+$$
+
+Here, both the selected direct output pathways and their associated shared-state influence are removed.
+
+### Interpretation of the Pruning Experiments
+
+The three experiments answer related but distinct questions.
+
+For the non-sharing network, pruning tests how many independently contributing learned flow pathways are required to preserve predictive performance.
+
+For the SALO network, partial pruning separates the number of **direct streamflow pathways** from the number of **cell states used internally to characterize catchment storage dynamics**. A cell state can remain informative to the rest of the network even when its direct discharge pathway has been removed.
+
+Full pruning then tests what happens when both functions are removed: the direct flow contribution and the cell state's role as an information source.
+
+The comparison among these experiments therefore helps distinguish between:
+
+```text
+number of useful flow pathways
+             versus
+number of useful internal cell states
+```
+
+rather than assuming that the two must always be identical.
 
 ### Pruning Outputs
 
-Each pruning run creates a case-specific output directory containing the model skill and diagnostic information for the selected pruning configuration.
+Each evaluation creates a case-specific output directory containing the results for the requested pruning configuration.
 
-The outputs include:
+The outputs include model-skill metrics and diagnostic information describing the selected pruning case, including the retained and removed pathways and the associated MCP state, discharge, and gate behavior.
 
-- `metrics.csv` containing model skill for the relevant data subsets,
-- `pruning_configuration.csv` identifying the pruned pathways,
-- original and effective output weights,
-- total and node-level discharge diagnostics,
-- cell-state and gate diagnostics, and
-- forcing and observation information with the associated temporal phase.
-
-The pruning evaluators use the pretrained five-node model checkpoints directly and do not retrain the network after pruning.
+Because the experiments are direct pruning tests of pretrained networks, the resulting performance reflects the effect of component removal itself rather than adaptation of the retained network through additional optimization.
 
 ---
 
