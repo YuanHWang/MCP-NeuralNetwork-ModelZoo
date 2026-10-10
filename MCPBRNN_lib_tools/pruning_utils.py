@@ -22,6 +22,7 @@ def find_project_root(start: Path) -> Path:
 
 
 PROJECT_DIR = find_project_root(SCRIPT_DIR)
+PRUNING_DIR = PROJECT_DIR / "Pruning"
 sys.path.insert(0, str(PROJECT_DIR))
 
 from MCPBRNN_lib_tools.Eval_Metric import KGE, NS  # noqa: E402
@@ -138,18 +139,18 @@ def parse_args(description: str):
 def resolve_path(value, default):
     path = Path(value) if value else Path(default)
     if not path.is_absolute():
-        path = (SCRIPT_DIR / path).resolve()
+        path = (PROJECT_DIR / path).resolve()
     return path
 
 
 def resolve_checkpoint(value, checkpoint_dir):
     if value:
-        path = resolve_path(value, SCRIPT_DIR)
+        path = resolve_path(value, PROJECT_DIR)
         if not path.is_file():
             raise FileNotFoundError(f"Checkpoint not found: {path}")
         return path
 
-    case_dir = SCRIPT_DIR / checkpoint_dir
+    case_dir = PRUNING_DIR / checkpoint_dir
     checkpoints = sorted(case_dir.glob("*.pt"))
     if len(checkpoints) != 1:
         raise RuntimeError(
@@ -453,7 +454,7 @@ def default_output_dir(case, pruned_nodes, selection_rule):
         suffix = "manual_nodes_" + "-".join(map(str, pruned_nodes))
     else:
         suffix = f"smallest_{len(pruned_nodes)}"
-    return SCRIPT_DIR / "evaluation" / info["output_dir"] / suffix
+    return PRUNING_DIR / "evaluation" / info["output_dir"] / suffix
 
 
 def run_case(case):
