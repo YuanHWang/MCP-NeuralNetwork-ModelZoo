@@ -6,7 +6,7 @@ This repository provides a curated and documented implementation of the neural-n
 
 *Figure 1. A neural-network architecture built from mass-conserving perceptrons.*
 
-The original research code was archived at [Zenodo](https://doi.org/10.5281/zenodo.15811866); the version presented here has been subsequently streamlined, refactored, and reorganized for improved readability, reproducibility, and reuse, with assistance from OpenAI's ChatGPT (GPT-6.1 Sol, Max intelligence mode).
+The original research code was archived at [Zenodo](https://doi.org/10.5281/zenodo.15811866); the version presented here has since been streamlined, refactored, and reorganized for improved readability, reproducibility, and reuse, with assistance from OpenAI's ChatGPT (GPT-6.1 Sol, Max intelligence mode).
 
 Note that this repository includes only the results for the Leaf River Basin and is intended primarily for pedagogical and demonstration purposes. Users interested in reproducing or extending the analyses to the CAMELS-US catchments are encouraged to follow the methodology described in Wang & Gupta (2025) and use the scripts provided in the original [Zenodo](https://doi.org/10.5281/zenodo.15811866).
 
@@ -205,26 +205,25 @@ $$
 MN^{DS-MLB}_{SALO}(N_1,N_2,N_3)
 $$
 
-Thus, the repository folders correspond to the paper notation as follows:
+The correspondence between the repository folders and the formal paper notation is therefore:
 
-```text
-1. MassConserved
-   MN^DS_None(N1,N2,N3)
+1. **`MassConserved`**  
+   $MN^{DS}_{None}(N_1,N_2,N_3)$
 
-2. MassConserved-InfoShared
-   MN^DS_SALO(N1,N2,N3)
+2. **`MassConserved-InfoShared`**  
+   $MN^{DS}_{SALO}(N_1,N_2,N_3)$
 
-3. MassRelaxed
-   MN^DSR_None(N1,N2,N3)
+3. **`MassRelaxed`**  
+   $MN^{DSR}_{None}(N_1,N_2,N_3)$
 
-4. MassRelaxed-InfoShared
-   MN^DSR_SALO(N1,N2,N3)
+4. **`MassRelaxed-InfoShared`**  
+   $MN^{DSR}_{SALO}(N_1,N_2,N_3)$
 
-5. ML
-   MN^(DS-MLB)_None(N1,N2,N3)
+5. **`ML`**  
+   $MN^{DS-MLB}_{None}(N_1,N_2,N_3)$
 
-6. ML-InfoShared
-   MN^(DS-MLB)_SALO(N1,N2,N3)
+6. **`ML-InfoShared`**  
+   $MN^{DS-MLB}_{SALO}(N_1,N_2,N_3)$
 
 For the multi-layer experiments, information sharing is applied to both the output and loss gates. Importantly, information sharing is **layer-wise**: each node can access the cell states of other nodes within the **same layer**, but information is not directly shared across different hidden layers.
 
@@ -242,13 +241,7 @@ where:
 - $N_2$ is the number of MCP nodes in the second hidden layer,
 - $N_3$ is the number of MCP nodes in the third hidden layer.
 
-The corresponding repository folder uses the compact notation:
-
-```text
-Lxyz
-```
-
-where `x`, `y`, and `z` represent $N_1$, $N_2$, and $N_3$, respectively.
+The corresponding repository folder uses the compact notation `Lxyz`, where `x`, `y`, and `z` represent $N_1$, $N_2$, and $N_3$, respectively.
 
 For example:
 
