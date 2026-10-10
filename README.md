@@ -160,9 +160,15 @@ The evaluation scripts report model skill for the spin-up, training, selection, 
 
 ## Multi-Layer MCP Networks
 
-The multi-layer experiments extend the MCP network architecture by arranging MCP nodes into two or three successive hidden layers. Based on the results of the single-layer experiments, the multi-layer investigation focuses on the **Distributed-State (DS)** formulation.
+The multi-layer experiments extend the MCP network architecture by arranging nodes into two or three successive hidden layers. Based on the results of the single-layer experiments, the multi-layer investigation focuses on the Distributed-State (DS) formulation.
 
-Three forms of inter-layer and output transformation are investigated, together with their corresponding information-sharing variants. The repository therefore contains **six multi-layer model families**.
+Figure 3 provides a conceptual summary of the multi-layer MCP architectures considered in this study, including the MassConserved, MassRelaxed, and Machine-Learning Benchmark (MLB) formulations.
+
+![Multi-layer MCP network architectures](Figure3.png)
+
+*Figure 3. Conceptual illustration of the multi-layer MCP architectures considered in this study. The three model families differ in how inter-layer and output mappings are constrained: MassConserved uses mass-conserving mappings, MassRelaxed uses positive but mass-relaxed mappings, and MLB uses unconstrained affine mappings.*
+
+Three forms of inter-layer and output transformation are investigated, together with corresponding information-sharing variants. The repository therefore contains six multi-layer model families.
 
 ### Multi-Layer Model Families
 
