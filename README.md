@@ -407,6 +407,52 @@ The evaluation scripts report model skill for the spin-up, training, selection, 
 
 ---
 
+
+
+## Physical-Conceptual MA3–MA6 Models with State Sharing
+
+The `MA-Sharing/` directory extends four physical-conceptual MCP architectures — **MA3, MA4, MA5, and MA6** — originally introduced and evaluated in our previous study, Wang & Gupta (2024), *Towards Interpretable Physical-Conceptual Catchment-Scale Hydrological Modeling Using the Mass-Conserving-Perceptron*.
+
+In that earlier work, MA3–MA6 were developed as progressively more complex architectural hypotheses for representing catchment-scale rainfall-runoff dynamics using physically interpretable, mass-conserving MCP units. The architectures differ in how cell states and runoff pathways are organized, ranging from serial soil-moisture/routing representations to structures containing parallel surface, groundwater, channel-routing, and overland-flow pathways.
+
+In Wang & Gupta (2025), these previously developed MA3–MA6 architectures were revisited as physical-conceptual benchmark models and augmented with global cell-state information sharing. The `MA-Sharing/` cases provided here correspond to the information-sharing extensions of those original architectures.
+
+### Base MA3–MA6 Architectures
+
+| Model | Main architectural hypothesis |
+| --- | --- |
+| `MA3` | One flow pathway with two cell states in series: a catchment soil-moisture storage followed by a routing storage |
+| `MA4` | Two parallel flow pathways representing near-surface runoff and groundwater/baseflow |
+| `MA5` | Three cell states and two flow pathways, extending MA4 by adding explicit surface/channel routing |
+| `MA6` | Extends MA5 by adding an additional overland-flow pathway that can route water directly toward the catchment outlet |
+
+All four architectures retain mass conservation at both the individual MCP-node level and the overall physical-conceptual model level.
+
+### SALO State Sharing
+
+The versions included here augment the original MA3–MA6 architectures with **Sharing-Augmented Loss and Output (SALO)** gates.
+
+In the original formulations, the gating behavior associated with a given MCP state is based primarily on information local to that state. In the SALO extensions, both the **output gate** and the **loss gate** are additionally allowed to access information from other cell states in the model.
+
+Conceptually:
+
+```text
+Original MA model:
+state i
+  ├── output gate <- local state information
+  └── loss gate   <- local state information
+
+MA-SALO model:
+state i
+  ├── output gate <- local state + other cell states
+  └── loss gate   <- local state + other cell states
+
+
+
+
+
+
+
 ## References & Citation
 
 Readers should consult the original paper for the formal model names, notation, and mathematical definitions associated with each MCP variant.
