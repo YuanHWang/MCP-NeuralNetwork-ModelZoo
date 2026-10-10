@@ -164,13 +164,12 @@ Three forms of inter-layer and output transformation are investigated, together 
 
 | Repository folder | Paper notation | Inter-layer / output mapping | Information sharing |
 | --- | --- | --- | --- |
-| `MassConserved` | MN<sup>DS</sup><sub>None</sub>(N<sub>1</sub>, N<sub>2</sub>, N<sub>3</sub>) | Mass-conserving mappings | None |
-| `MassConserved-InfoShared` | MN<sup>DS</sup><sub>SALO</sub>(N<sub>1</sub>, N<sub>2</sub>, N<sub>3</sub>) | Mass-conserving mappings | Output and loss gates |
-| `MassRelaxed` | MN<sup>DSR</sup><sub>None</sub>(N<sub>1</sub>, N<sub>2</sub>, N<sub>3</sub>) | Positive, mass-relaxed mappings | None |
-| `MassRelaxed-InfoShared` | MN<sup>DSR</sup><sub>SALO</sub>(N<sub>1</sub>, N<sub>2</sub>, N<sub>3</sub>) | Positive, mass-relaxed mappings | Output and loss gates |
-| `ML` | MN<sup>DS-MLB</sup><sub>None</sub>(N<sub>1</sub>, N<sub>2</sub>, N<sub>3</sub>) | Unconstrained affine mappings | None |
-| `ML-InfoShared` | MN<sup>DS-MLB</sup><sub>SALO</sub>(N<sub>1</sub>, N<sub>2</sub>, N<sub>3</sub>) | Unconstrained affine mappings | Output and loss gates |
-
+| `MassConserved` | `MN^DS_None(N1,N2,N3)` | Mass-conserving mappings | None |
+| `MassConserved-InfoShared` | `MN^DS_SALO(N1,N2,N3)` | Mass-conserving mappings | Output and loss gates |
+| `MassRelaxed` | `MN^DSR_None(N1,N2,N3)` | Positive, mass-relaxed mappings | None |
+| `MassRelaxed-InfoShared` | `MN^DSR_SALO(N1,N2,N3)` | Positive, mass-relaxed mappings | Output and loss gates |
+| `ML` | `MN^(DS-MLB)_None(N1,N2,N3)` | Unconstrained affine mappings | None |
+| `ML-InfoShared` | `MN^(DS-MLB)_SALO(N1,N2,N3)` | Unconstrained affine mappings | Output and loss gates |
 The first three folders correspond to the non-information-sharing multi-layer networks summarized in **Figure 5** of Wang & Gupta (2025). The three `InfoShared` folders correspond to the multi-layer **Sharing-Augmented Loss and Output (SALO)** networks summarized in **Figure 9**.
 
 For the multi-layer experiments, information sharing is applied to both the output and loss gates. Importantly, information sharing is **layer-wise**: each node can access the cell states of other nodes within the **same layer**, but information is not directly shared across different hidden layers.
