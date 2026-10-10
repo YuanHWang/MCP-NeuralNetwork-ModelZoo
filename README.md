@@ -10,6 +10,8 @@ The original research code was archived at [Zenodo](https://doi.org/10.5281/zeno
 
 Note that this repository includes only the results for the Leaf River Basin and is intended primarily for pedagogical and demonstration purposes. Users interested in reproducing or extending the analyses to the CAMELS-US catchments are encouraged to follow the methodology described in Wang & Gupta (2025) and use the scripts provided in the original [Zenodo](https://doi.org/10.5281/zenodo.15811866).
 
+---
+
 ## Quick Start
 
 ### Requirements
@@ -64,7 +66,9 @@ Five network types are implemented:
 | Distributed-State-Relaxed | MN<sup>DSR</sup>(N<sub>1</sub>) | Unity input to every node | Positive weights not constrained to sum to 1 |
 | Machine-Learning Benchmark | MN<sup>MLB</sup>(N<sub>1</sub>) | Unconstrained linear mapping with bias | Unconstrained linear mapping with bias |
 
-In the **Distributed-Input (DI)** formulation, precipitation is partitioned among the parallel MCP nodes using positive weights that sum to one, while the resulting nodal streamflow components are summed to obtain total streamflow. In contrast, the **Distributed-State (DS)** formulation sends the full precipitation input to every node and combines the resulting streamflow components using positive output weights that sum to one.
+In the **Distributed-Input (DI)** formulation, precipitation is partitioned among the parallel MCP nodes using positive weights that sum to one, while the resulting nodal streamflow components are summed to obtain total streamflow.
+
+In contrast, the **Distributed-State (DS)** formulation sends the full precipitation input to every node and combines the resulting streamflow components using positive output weights that sum to one.
 
 The **DIR** and **DSR** formulations relax the corresponding input- and output-side network-level mass-conservation constraints, respectively. The **MLB** architecture provides the least constrained network-level benchmark by using unconstrained linear mappings with bias terms at both the input and output sides.
 
@@ -156,9 +160,9 @@ The evaluation scripts report model skill for the spin-up, training, selection, 
 
 ## Multi-Layer MCP Networks
 
-The multi-layer experiments extend the MCP network architecture by arranging nodes into two or three successive hidden layers. Based on the results of the single-layer experiments, the multi-layer investigation focuses on the **Distributed-State (DS)** formulation.
+The multi-layer experiments extend the MCP network architecture by arranging MCP nodes into two or three successive hidden layers. Based on the results of the single-layer experiments, the multi-layer investigation focuses on the **Distributed-State (DS)** formulation.
 
-Three forms of inter-layer and output transformation are investigated, together with corresponding information-sharing variants. The repository therefore contains **six multi-layer model families**.
+Three forms of inter-layer and output transformation are investigated, together with their corresponding information-sharing variants. The repository therefore contains **six multi-layer model families**.
 
 ### Multi-Layer Model Families
 
@@ -171,11 +175,11 @@ Three forms of inter-layer and output transformation are investigated, together 
 | `ML` | `MN^DS-MLB_None(N1,N2,N3)` | Unconstrained affine | None |
 | `ML-InfoShared` | `MN^DS-MLB_SALO(N1,N2,N3)` | Unconstrained affine | Output + loss gates |
 
-The non-information-sharing folders — `MassConserved`, `MassRelaxed`, and `ML` — correspond to the multi-layer networks summarized in **Figure 5** of Wang & Gupta (2025).
+In the table above, the **1st, 3rd, and 5th folders** — `MassConserved`, `MassRelaxed`, and `ML` — correspond to the **non-information-sharing** multi-layer networks summarized in **Figure 5** of Wang & Gupta (2025).
 
-Their information-sharing counterparts — `MassConserved-InfoShared`, `MassRelaxed-InfoShared`, and `ML-InfoShared` — correspond to the multi-layer **Sharing-Augmented Loss and Output (SALO)** networks summarized in **Figure 9**.
+The **2nd, 4th, and 6th folders** — `MassConserved-InfoShared`, `MassRelaxed-InfoShared`, and `ML-InfoShared` — correspond to the multi-layer **Sharing-Augmented Loss and Output (SALO)** networks summarized in **Figure 9**.
 
-Using the formal notation of Wang & Gupta (2025), these model families are written as:
+Using the formal notation of Wang & Gupta (2025), the six model families are:
 
 $$
 MN^{DS}_{None}(N_1,N_2,N_3)
@@ -223,11 +227,11 @@ For example:
 
 | Folder | Architecture | Interpretation |
 | --- | --- | --- |
-| `L110` | (1, 1, 0) | Two layers with one MCP node in each layer |
-| `L230` | (2, 3, 0) | Two layers with 2 nodes in Layer 1 and 3 nodes in Layer 2 |
-| `L111` | (1, 1, 1) | Three layers with one MCP node in each layer |
-| `L231` | (2, 3, 1) | Three layers with 2, 3, and 1 nodes |
-| `L333` | (3, 3, 3) | Three layers with 3 nodes in every layer |
+| `L110` | `(1, 1, 0)` | Two layers with one MCP node in each layer |
+| `L230` | `(2, 3, 0)` | Two layers with 2 nodes in Layer 1 and 3 nodes in Layer 2 |
+| `L111` | `(1, 1, 1)` | Three layers with one MCP node in each layer |
+| `L231` | `(2, 3, 1)` | Three layers with 2, 3, and 1 nodes |
+| `L333` | `(3, 3, 3)` | Three layers with 3 nodes in every layer |
 
 A value of `0` for $N_3$ indicates that the third hidden layer is absent.
 
@@ -301,7 +305,7 @@ L330  L331  L332  L333
 
 ### Special Cases: L110 and L111
 
-Because information sharing occurs only among nodes within the **same hidden layer**, sharing does not introduce any additional information when a layer contains only one node.
+Because information sharing occurs only among nodes within the **same hidden layer**, sharing does not introduce any additional cross-node information when a layer contains only one node.
 
 This makes the following two architectures special:
 
@@ -310,9 +314,9 @@ L110 = (1, 1, 0)
 L111 = (1, 1, 1)
 ```
 
-Every active hidden layer in these architectures contains exactly one MCP node. Therefore, there are no additional nodes within a layer from which state information can be shared.
+Every active hidden layer in these architectures contains exactly one MCP node. Therefore, there are no additional nodes within a layer from which cell-state information can be shared.
 
-Consequently, for these two architectures, the information-sharing versions are equivalent to their corresponding non-sharing versions:
+Consequently, for these two architectures, the information-sharing versions are equivalent to their corresponding non-information-sharing versions:
 
 ```text
 MassConserved-InfoShared/L110 = MassConserved/L110
@@ -364,7 +368,7 @@ $$
 
 which is a two-layer network containing three MCP nodes in the first layer and three MCP nodes in the second layer.
 
-To evaluate the pretrained MassConserved `L330` model:
+To evaluate the pretrained `MassConserved/L330` model:
 
 ```bash
 cd MN-Multi-Layers/MassConserved/L330
@@ -392,11 +396,15 @@ Readers should consult the original paper for the formal model names, notation, 
 
 > Wang, Y.-H., & Gupta, H. V. (2025). Using machine learning to discover parsimonious and physically-interpretable representations of catchment-scale rainfall-runoff dynamics. *Water Resources Research, 61*(12), e2025WR040178. https://doi.org/10.1029/2025WR040178
 
+---
+
 ## Contact
 
 This repository provides a consolidated and reproducible collection of MCP neural network variants, including cleaned training and evaluation scripts, checkpoints, and data conventions.
 
 For questions or suggestions, please contact **Yuan-Heng Wang, Ph.D.** at `yhwang0730@gmail.com` or `yhwang0730@arizona.edu`.
+
+---
 
 ## License
 
