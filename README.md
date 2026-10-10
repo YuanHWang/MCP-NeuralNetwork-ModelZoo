@@ -40,6 +40,8 @@ The data sequence includes three repetitions of water year 1949 for spin-up, fol
 
 Pretrained Leaf River checkpoints are included in the model folders. They can be used for direct evaluation or as starting points for continued training and fine-tuning.
 
+---
+
 ## Single-Layer MCP Networks
 
 The single-layer experiments investigate a family of parallel MCP networks in which the number of MCP nodes, the treatment of network-level mass conservation, and the degree of internal state information sharing can be systematically varied.
@@ -132,10 +134,232 @@ single-layer model configurations.
 
 Each model variant is provided with a training script and a corresponding evaluation script. The filenames identify both the network type and the information-sharing configuration.
 
-For example, to run the **Machine-Learning Benchmark (MLB)** network without internal state sharing:
+For example, to continue training the **Machine-Learning Benchmark (MLB)** network without internal state sharing:
 
 ```bash
 python train_MLB_None_single_layer.py
+```
+
+To evaluate the corresponding pretrained model:
+
+```bash
+python evaluate_MLB_None_single_layer.py
+```
+
+Similarly, `DS_SALO` refers to a Distributed-State network with information shared at both the output and loss gates, whereas `DIR_SAO` refers to a Distributed-Input-Relaxed network with state information shared only at the output gates.
+
+The number of MCP nodes, $N_1$, is specified through the model configuration used by the corresponding script.
+
+The evaluation scripts report model skill for the spin-up, training, selection, and testing periods, together with the corresponding MCP state, flux, and gate diagnostics.
+
+---
+
+## Multi-Layer MCP Networks
+
+The multi-layer experiments extend the MCP network architecture by arranging nodes into two or three successive hidden layers. Based on the results of the single-layer experiments, the multi-layer investigation focuses on the **Distributed-State (DS)** formulation.
+
+Three forms of inter-layer and output transformation are investigated, together with corresponding information-sharing variants. The repository therefore contains **six multi-layer model families**.
+
+### Multi-Layer Model Families
+
+| Repository folder | Paper notation | Inter-layer / output mapping | Information sharing |
+| --- | --- | --- | --- |
+| `MassConserved` | MN<sup>DS</sup><sub>None</sub>(N<sub>1</sub>, N<sub>2</sub>, N<sub>3</sub>) | Mass-conserving mappings | None |
+| `MassConserved-InfoShared` | MN<sup>DS</sup><sub>SALO</sub>(N<sub>1</sub>, N<sub>2</sub>, N<sub>3</sub>) | Mass-conserving mappings | Output and loss gates |
+| `MassRelaxed` | MN<sup>DSR</sup><sub>None</sub>(N<sub>1</sub>, N<sub>2</sub>, N<sub>3</sub>) | Positive, mass-relaxed mappings | None |
+| `MassRelaxed-InfoShared` | MN<sup>DSR</sup><sub>SALO</sub>(N<sub>1</sub>, N<sub>2</sub>, N<sub>3</sub>) | Positive, mass-relaxed mappings | Output and loss gates |
+| `ML` | MN<sup>DS-MLB</sup><sub>None</sub>(N<sub>1</sub>, N<sub>2</sub>, N<sub>3</sub>) | Unconstrained affine mappings | None |
+| `ML-InfoShared` | MN<sup>DS-MLB</sup><sub>SALO</sub>(N<sub>1</sub>, N<sub>2</sub>, N<sub>3</sub>) | Unconstrained affine mappings | Output and loss gates |
+
+The first three folders correspond to the non-information-sharing multi-layer networks summarized in **Figure 5** of Wang & Gupta (2025). The three `InfoShared` folders correspond to the multi-layer **Sharing-Augmented Loss and Output (SALO)** networks summarized in **Figure 9**.
+
+For the multi-layer experiments, information sharing is applied to both the output and loss gates. Importantly, information sharing is **layer-wise**: each node can access the cell states of other nodes within the **same layer**, but information is not directly shared across different hidden layers.
+
+### Multi-Layer Architecture Notation
+
+A multi-layer architecture is denoted as:
+
+$$
+MN^{\mathrm{Type}}_{\mathrm{Sharing}}(N_1,N_2,N_3)
+$$
+
+where:
+
+- $N_1$ is the number of MCP nodes in the first hidden layer,
+- $N_2$ is the number of MCP nodes in the second hidden layer,
+- $N_3$ is the number of MCP nodes in the third hidden layer.
+
+The corresponding repository folder uses the compact notation:
+
+```text
+Lxyz
+```
+
+where `x`, `y`, and `z` represent $N_1$, $N_2$, and $N_3$, respectively.
+
+For example:
+
+| Folder | Architecture | Interpretation |
+| --- | --- | --- |
+| `L110` | (1, 1, 0) | Two layers with one MCP node in each layer |
+| `L230` | (2, 3, 0) | Two layers with 2 nodes in Layer 1 and 3 nodes in Layer 2 |
+| `L111` | (1, 1, 1) | Three layers with one MCP node in each layer |
+| `L231` | (2, 3, 1) | Three layers with 2, 3, and 1 nodes |
+| `L333` | (3, 3, 3) | Three layers with 3 nodes in every layer |
+
+A value of `0` for $N_3$ indicates that the third hidden layer is absent.
+
+The single-layer architectures are stored separately under `MN-Single-Layer/`.
+
+### Number of Multi-Layer Cases
+
+For the two-layer networks:
+
+```text
+N1 = 1, 2, 3
+N2 = 1, 2, 3
+N3 = 0
+```
+
+giving:
+
+$$
+3 \times 3 = 9
+$$
+
+two-layer architectures.
+
+For the three-layer networks:
+
+```text
+N1 = 1, 2, 3
+N2 = 1, 2, 3
+N3 = 1, 2, 3
+```
+
+giving:
+
+$$
+3 \times 3 \times 3 = 27
+$$
+
+three-layer architectures.
+
+Therefore, each multi-layer model family contains:
+
+$$
+9 + 27 = 36
+$$
+
+architectures.
+
+With six model families, the complete multi-layer model zoo contains:
+
+$$
+6 \times 36 = 216
+$$
+
+model configurations.
+
+The 36 architecture folders contained in each family are:
+
+```text
+L110  L111  L112  L113
+L120  L121  L122  L123
+L130  L131  L132  L133
+
+L210  L211  L212  L213
+L220  L221  L222  L223
+L230  L231  L232  L233
+
+L310  L311  L312  L313
+L320  L321  L322  L323
+L330  L331  L332  L333
+```
+
+### Special Cases: L110 and L111
+
+Because information sharing occurs only among nodes within the **same hidden layer**, sharing does not introduce any additional information when a layer contains only one node.
+
+This makes the following two architectures special:
+
+```text
+L110 = (1, 1, 0)
+L111 = (1, 1, 1)
+```
+
+Every active hidden layer in these architectures contains exactly one MCP node. Therefore, there are no additional nodes within a layer from which state information can be shared.
+
+Consequently, for these two architectures, the information-sharing versions are equivalent to their corresponding non-sharing versions:
+
+```text
+MassConserved-InfoShared/L110 = MassConserved/L110
+MassConserved-InfoShared/L111 = MassConserved/L111
+
+MassRelaxed-InfoShared/L110   = MassRelaxed/L110
+MassRelaxed-InfoShared/L111   = MassRelaxed/L111
+
+ML-InfoShared/L110            = ML/L110
+ML-InfoShared/L111            = ML/L111
+```
+
+Information sharing begins to introduce additional cross-node dependencies only when at least one hidden layer contains two or more MCP nodes.
+
+### Directory Structure
+
+The multi-layer model zoo is organized as:
+
+```text
+MN-Multi-Layers/
+├── MassConserved/
+├── MassConserved-InfoShared/
+├── MassRelaxed/
+├── MassRelaxed-InfoShared/
+├── ML/
+└── ML-InfoShared/
+```
+
+Each of these six folders contains the same set of 36 `Lxyz` architecture folders.
+
+A typical case is organized as:
+
+```text
+MN-Multi-Layers/
+└── MassConserved/
+    └── L330/
+        ├── best_model_epochXXX.pt
+        ├── train_MassConserved_MultiLayer_L330.py
+        └── evaluate_MassConserved_MultiLayer_L330.py
+```
+
+### Running a Multi-Layer Case
+
+For example, `L330` represents:
+
+$$
+(N_1,N_2,N_3)=(3,3,0)
+$$
+
+which is a two-layer network containing three MCP nodes in the first layer and three MCP nodes in the second layer.
+
+To evaluate the pretrained MassConserved `L330` model:
+
+```bash
+cd MN-Multi-Layers/MassConserved/L330
+python evaluate_MassConserved_MultiLayer_L330.py
+```
+
+To continue training from the checkpoint stored in the same folder:
+
+```bash
+python train_MassConserved_MultiLayer_L330.py
+```
+
+By default, the scripts use the pretrained checkpoint stored in the corresponding `Lxyz` directory.
+
+The evaluation scripts report model skill for the spin-up, training, selection, and testing periods and save the associated layer-wise discharge, storage, loss, gate, and inter-layer mapping diagnostics.
+
+---
 
 ## References & Citation
 
@@ -144,11 +368,11 @@ Readers should consult the original paper for the formal model names, notation, 
 - Full article: [Wang & Gupta (2025)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2025WR040178)
 - DOI: [10.1029/2025WR040178](https://doi.org/10.1029/2025WR040178)
 
-> Wang, Y.-H., & Gupta, H. V. (2025). Using machine learning to discover parsimonious and physically‐interpretable representations of catchment‐scale rainfall‐runoff dynamics. *Water Resources Research, 61*(12), e2025WR040178. https://doi.org/10.1029/2025WR040178
+> Wang, Y.-H., & Gupta, H. V. (2025). Using machine learning to discover parsimonious and physically-interpretable representations of catchment-scale rainfall-runoff dynamics. *Water Resources Research, 61*(12), e2025WR040178. https://doi.org/10.1029/2025WR040178
 
 ## Contact
 
-This repository provides a consolidated and reproducible collection of MCP neural network variants, including cleaned training and evaluation scripts, checkpoints, and data conventions. 
+This repository provides a consolidated and reproducible collection of MCP neural network variants, including cleaned training and evaluation scripts, checkpoints, and data conventions.
 
 For questions or suggestions, please contact **Yuan-Heng Wang, Ph.D.** at `yhwang0730@gmail.com` or `yhwang0730@arizona.edu`.
 
