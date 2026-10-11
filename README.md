@@ -524,7 +524,7 @@ The definition of the **MLB architecture is not identical in the single-layer an
 For the single-layer experiments described earlier, the MLB family is denoted as
 
 $$
-MN^{MLB}_{\mathrm{Sharing}}(N_1),
+MN^{MLB}_{\mathrm{SALO}}(N_1),
 $$
 
 and includes learnable transformations at both the network input and network output.
@@ -532,7 +532,7 @@ and includes learnable transformations at both the network input and network out
 In contrast, the multi-layer MLB formulation is constructed from the **Distributed-State (DS)** architecture and is denoted as
 
 $$
-MN^{DS\text{-}MLB}_{\mathrm{Sharing}}(N_1,N_2,N_3).
+MN^{DS\text{-}MLB}_{\mathrm{SALO}}(N_1,N_2,N_3).
 $$
 
 Because the multi-layer MLB family is based on the DS formulation, precipitation is supplied directly to the first-layer MCP nodes with unit input weight. In other words, there is **no additional learnable input layer preceding the first MCP layer**. The machine-learning flexibility is instead introduced through the unconstrained mappings between MCP layers and at the final network output.
