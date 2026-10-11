@@ -70,7 +70,7 @@ The corresponding single-node implementation and pretrained Leaf River result ar
 
 ```text
 Miscellaneous/SingleNode-MN
-
+```
 ---
 
 ## Single-Layer MCP Networks
