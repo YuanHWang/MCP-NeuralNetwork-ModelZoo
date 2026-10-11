@@ -46,8 +46,6 @@ Pretrained Leaf River checkpoints are included in the model folders. They can be
 
 ## Basic Computational Unit Update
 
-## Basic Computational Unit Update
-
 The representative single-node MCP formulation introduced in Wang & Gupta (2024) used the **7-parameter** computational unit
 
 $$
