@@ -769,6 +769,7 @@ Readers should consult the original papers for the formal model names, notation,
 
 ### Physical-Conceptual MA Architecture Reference
 
+- Full article: [Wang & Gupta (2024b)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2024WR037224)
 - DOI: [10.1029/2024WR037224](https://doi.org/10.1029/2024WR037224)
 
 > Wang, Y.-H., & Gupta, H. V. (2024b). Towards interpretable physical-conceptual catchment-scale hydrological modeling using the mass-conserving-perceptron. *Water Resources Research, 60*(10), e2024WR037224. https://doi.org/10.1029/2024WR037224
