@@ -46,6 +46,8 @@ Pretrained Leaf River checkpoints are included in the model folders. They can be
 
 ## Basic Computational Unit Update
 
+## Basic Computational Unit Update
+
 The representative single-node MCP formulation introduced in Wang & Gupta (2024) used the **7-parameter** computational unit
 
 $$
@@ -64,13 +66,41 @@ $$
 MN^{DS}_{\mathrm{none}}.
 $$
 
-The key difference is in the loss gate. In the 7-parameter formulation, the loss gate depends on potential evapotranspiration (PET) at the current time step, whereas the 8-parameter formulation additionally allows the loss gate to depend on the **current MCP cell state**. Thus, the loss flux can respond jointly to atmospheric demand represented by PET and to the amount of water currently stored in the MCP state.
+The key difference lies in the formulation of the loss gate. In the 7-parameter formulation, the loss gate depends on potential evapotranspiration (PET) at the current time step. In the 8-parameter formulation used in this study, the loss gate additionally depends on the **current MCP cell state**. Thus, the loss flux can respond jointly to the atmospheric demand represented by PET and to the amount of water currently stored in the MCP state.
 
-The corresponding single-node implementation and pretrained Leaf River result are provided in:
+The corresponding single-node implementation and pretrained Leaf River checkpoint are provided in:
 
 ```text
 Miscellaneous/SingleNode-MN
 ```
+
+The directory contains:
+
+```text
+SingleNode-MN/
+├── model_epoch17.pt
+├── train_SingleNode_MN.py
+└── evaluate_SingleNode_MN.py
+```
+
+### Running the Single-Node Case
+
+To evaluate the pretrained model:
+
+```bash
+cd Miscellaneous/SingleNode-MN
+python evaluate_SingleNode_MN.py
+```
+
+To continue training from the pretrained checkpoint:
+
+```bash
+python train_SingleNode_MN.py
+```
+
+The evaluation script reports model skill for the spin-up, training, selection, and testing periods and saves the corresponding MCP state, flux, and gate diagnostics.
+
+---
 ---
 
 ## Single-Layer MCP Networks
