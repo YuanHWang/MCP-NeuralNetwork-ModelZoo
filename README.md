@@ -596,7 +596,7 @@ Each directory contains the corresponding pretrained Leaf River checkpoint toget
 
 ## Physical-Conceptual MA3–MA6 Models with SALO State Sharing
 
-The `MA-Sharing/` directory contains information-sharing extensions of four physical-conceptual MCP architectures — **MA3, MA4, MA5, and MA6** — originally introduced and evaluated in our previous study, Wang & Gupta (2024), *Towards Interpretable Physical-Conceptual Catchment-Scale Hydrological Modeling Using the Mass-Conserving-Perceptron*.
+The `MA-Sharing/` directory contains information-sharing extensions of four physical-conceptual MCP architectures — **MA3, MA4, MA5, and MA6** — originally introduced and evaluated in our previous study, Wang & Gupta (2024b), *Towards Interpretable Physical-Conceptual Catchment-Scale Hydrological Modeling Using the Mass-Conserving-Perceptron*.
 
 In that earlier work, MA3–MA6 were developed as progressively more complex architectural hypotheses for representing catchment-scale rainfall-runoff dynamics using physically interpretable and mass-conserving MCP units. The architectures differ in how cell states and runoff pathways are organized, ranging from serial soil-moisture/routing representations to structures containing parallel surface, groundwater, channel-routing, and overland-flow pathways.
 
@@ -613,7 +613,7 @@ The four architectures differ primarily in the number of cell states and the org
 | `MA5` | Three cell states and two flow pathways, extending MA4 by including explicit surface/channel routing |
 | `MA6` | Extends MA5 by including an additional overland-flow pathway that can route water directly toward the catchment outlet |
 
-All four architectures retain the physically interpretable storage and flow-path structures developed in Wang & Gupta (2024).
+All four architectures retain the physically interpretable storage and flow-path structures developed in Wang & Gupta (2024b).
 
 ### SALO State Sharing
 
@@ -760,11 +760,18 @@ Readers should consult the original papers for the formal model names, notation,
 
 > Wang, Y.-H., & Gupta, H. V. (2025). Using machine learning to discover parsimonious and physically-interpretable representations of catchment-scale rainfall-runoff dynamics. *Water Resources Research, 61*(12), e2025WR040178. https://doi.org/10.1029/2025WR040178
 
+### Original MCP Reference
+
+- Full article: [Wang & Gupta (2024a)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2023WR036461)
+- DOI: [10.1029/2023WR036461](https://doi.org/10.1029/2023WR036461)
+
+> Wang, Y.-H., & Gupta, H. V. (2024a). *A mass-conserving-perceptron for machine-learning-based modeling of geoscientific systems*. Water Resources Research, 60(4), e2023WR036461.
+
 ### Physical-Conceptual MA Architecture Reference
 
 - DOI: [10.1029/2024WR037224](https://doi.org/10.1029/2024WR037224)
 
-> Wang, Y.-H., & Gupta, H. V. (2024). Towards interpretable physical-conceptual catchment-scale hydrological modeling using the mass-conserving-perceptron. *Water Resources Research, 60*(10), e2024WR037224. https://doi.org/10.1029/2024WR037224
+> Wang, Y.-H., & Gupta, H. V. (2024b). Towards interpretable physical-conceptual catchment-scale hydrological modeling using the mass-conserving-perceptron. *Water Resources Research, 60*(10), e2024WR037224. https://doi.org/10.1029/2024WR037224
 
 ---
 
