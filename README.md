@@ -49,13 +49,13 @@ Pretrained Leaf River checkpoints are included in the model folders. They can be
 The representative single-node MCP formulation introduced in Wang & Gupta (2024) used the **7-parameter** computational unit
 
 $$
-MC\{O_{\sigma}L_{\sigma}^{\mathrm{con}}\}.
+MC\left\{O_{\sigma}L_{\sigma}^{\mathrm{con}}\right\}.
 $$
 
 In the present study, we use the corresponding **8-parameter** formulation,
 
 $$
-MC\{O_{\sigma}L_{\sigma+}^{\mathrm{con}}\},
+MC\left\{O_{\sigma}L_{\sigma+}^{\mathrm{con}}\right\},
 $$
 
 referred to in Wang & Gupta (2025) as
