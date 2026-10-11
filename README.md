@@ -44,6 +44,35 @@ Pretrained Leaf River checkpoints are included in the model folders. They can be
 
 ---
 
+## Basic Computational Unit Update
+
+The representative single-node MCP formulation introduced in Wang & Gupta (2024) used the **7-parameter** computational unit
+
+$$
+MC\{O_{\sigma}L_{\sigma}^{\mathrm{con}}\}.
+$$
+
+In the present study, we use the corresponding **8-parameter** formulation,
+
+$$
+MC\{O_{\sigma}L_{\sigma+}^{\mathrm{con}}\},
+$$
+
+referred to in Wang & Gupta (2025) as
+
+$$
+MN^{DS}_{none}.
+$$
+
+The key difference is in the loss gate. In the 7-parameter formulation, the loss gate depends on potential evapotranspiration (PET) at the current time step, whereas the 8-parameter formulation additionally allows the loss gate to depend on the **current MCP cell state**. Thus, the loss flux can respond jointly to atmospheric demand represented by PET and to the amount of water currently stored in the MCP state.
+
+The corresponding single-node implementation and pretrained Leaf River result are provided in:
+
+```text
+Miscellaneous/SingleNode-MN
+
+---
+
 ## Single-Layer MCP Networks
 
 The single-layer experiments investigate a family of parallel MCP networks in which the number of MCP nodes, the treatment of network-level mass conservation, and the degree of internal state information sharing can be systematically varied.
