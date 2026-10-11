@@ -49,19 +49,19 @@ Pretrained Leaf River checkpoints are included in the model folders. They can be
 The representative single-node MCP formulation introduced in Wang & Gupta (2024) used the **7-parameter** computational unit
 
 $$
-MC\left\{O_{\sigma}L_{\sigma}^{\mathrm{con}}\right\}.
+MC\lbrace O_{\sigma}L_{\sigma}^{\mathrm{con}}\rbrace.
 $$
 
 In the present study, we use the corresponding **8-parameter** formulation,
 
 $$
-MC\left\{O_{\sigma}L_{\sigma+}^{\mathrm{con}}\right\},
+MC\lbrace O_{\sigma}L_{\sigma+}^{\mathrm{con}}\rbrace,
 $$
 
 referred to in Wang & Gupta (2025) as
 
 $$
-MN^{DS}_{none}.
+MN^{DS}_{\mathrm{none}}.
 $$
 
 The key difference is in the loss gate. In the 7-parameter formulation, the loss gate depends on potential evapotranspiration (PET) at the current time step, whereas the 8-parameter formulation additionally allows the loss gate to depend on the **current MCP cell state**. Thus, the loss flux can respond jointly to atmospheric demand represented by PET and to the amount of water currently stored in the MCP state.
