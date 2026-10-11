@@ -469,6 +469,130 @@ By default, the scripts use the pretrained checkpoint stored in the correspondin
 The evaluation scripts report model skill for the spin-up, training, selection, and testing periods and save the associated layer-wise discharge, storage, loss, gate, and inter-layer mapping diagnostics.
 
 ---
+## Additional Cases for Multi-Layer Networks
+
+Several additional benchmark cases are included under `Miscellaneous/` to clarify how the relaxed input/output transformations used in the single-layer networks relate to the corresponding multi-layer formulations.
+
+### Single-Node DIR, DSR, and MLB Cases
+
+The **single-node Distributed-Input-Relaxed (DIR)** case,
+
+$$
+MN^{DIR}_{\mathrm{None}}(1),
+$$
+
+includes a learnable input weight that is not constrained to equal one. This allows the effective precipitation input supplied to the MCP node to be adjusted relative to the observed precipitation.
+
+The corresponding training and evaluation scripts, together with the pretrained Leaf River checkpoint, are provided in:
+
+```text
+Miscellaneous/SingleNode-DIR
+```
+
+The **single-node Distributed-State-Relaxed (DSR)** case,
+
+$$
+MN^{DSR}_{\mathrm{None}}(1),
+$$
+
+retains the direct precipitation input to the MCP node but introduces a learnable output weight that is not constrained to equal one. This allows the nodal discharge to be rescaled when producing the final streamflow estimate.
+
+The corresponding files are provided in:
+
+```text
+Miscellaneous/SingleNode-DSR
+```
+
+The **single-node Machine-Learning Benchmark (MLB)** case,
+
+$$
+MN^{MLB}_{\mathrm{None}}(1),
+$$
+
+contains learnable transformations on both the input and output sides, allowing the effective precipitation input and the final streamflow output to be adjusted by the surrounding machine-learning layers.
+
+The corresponding files are provided in:
+
+```text
+Miscellaneous/SingleNode-MLB
+```
+
+### Single-Layer MLB versus Multi-Layer DS-MLB
+
+The definition of the **MLB architecture is not identical in the single-layer and multi-layer experiments**.
+
+For the single-layer experiments described earlier, the MLB family is denoted as
+
+$$
+MN^{MLB}_{\mathrm{Sharing}}(N_1),
+$$
+
+and includes learnable transformations at both the network input and network output.
+
+In contrast, the multi-layer MLB formulation is constructed from the **Distributed-State (DS)** architecture and is denoted as
+
+$$
+MN^{DS\text{-}MLB}_{\mathrm{Sharing}}(N_1,N_2,N_3).
+$$
+
+Because the multi-layer MLB family is based on the DS formulation, precipitation is supplied directly to the first-layer MCP nodes with unit input weight. In other words, there is **no additional learnable input layer preceding the first MCP layer**. The machine-learning flexibility is instead introduced through the unconstrained mappings between MCP layers and at the final network output.
+
+Consequently, the one-layer reductions of the multi-layer MLB formulation are distinct from the MLB models included in the main single-layer model zoo.
+
+For the non-information-sharing case,
+
+$$
+MN^{DS\text{-}MLB}_{\mathrm{None}}(N_1,0,0),
+$$
+
+the corresponding implementations are:
+
+```text
+Miscellaneous/MultiLayer-MLB-L100
+Miscellaneous/MultiLayer-MLB-L200
+Miscellaneous/MultiLayer-MLB-L300
+Miscellaneous/MultiLayer-MLB-L400
+Miscellaneous/MultiLayer-MLB-L500
+```
+
+where:
+
+$$
+L100=(1,0,0),\quad
+L200=(2,0,0),\quad
+L300=(3,0,0),\quad
+L400=(4,0,0),\quad
+L500=(5,0,0).
+$$
+
+The corresponding Sharing-Augmented Loss and Output (SALO) cases are denoted as
+
+$$
+MN^{DS\text{-}MLB}_{\mathrm{SALO}}(N_1,0,0),
+$$
+
+and are provided in:
+
+```text
+Miscellaneous/MultiLayer-MLB-L200-SALO
+Miscellaneous/MultiLayer-MLB-L300-SALO
+Miscellaneous/MultiLayer-MLB-L400-SALO
+Miscellaneous/MultiLayer-MLB-L500-SALO
+```
+
+There is no separate `L100-SALO` case because a single MCP node has no other node within the layer from which state information can be shared. Therefore,
+
+$$
+MN^{DS\text{-}MLB}_{\mathrm{SALO}}(1,0,0)
+\equiv
+MN^{DS\text{-}MLB}_{\mathrm{None}}(1,0,0),
+$$
+
+and the `L100` non-sharing implementation already represents both cases.
+
+Each directory contains the corresponding pretrained Leaf River checkpoint together with its training and evaluation scripts.
+
+---
 
 ## Physical-Conceptual MA3–MA6 Models with SALO State Sharing
 
