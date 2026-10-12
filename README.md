@@ -6,7 +6,7 @@ This repository provides a curated and documented implementation of the neural-n
 
 *Figure 1. A neural-network architecture built from mass-conserving perceptrons.*
 
-The original research code was archived at [Zenodo](https://doi.org/10.5281/zenodo.15811866); the version presented here has since been streamlined, refactored, and reorganized for improved readability, reproducibility, and reuse, with assistance from OpenAI's ChatGPT (GPT-6.1 Sol, Max intelligence mode).
+The original research code was archived at [Zenodo](https://doi.org/10.5281/zenodo.15811866); the version presented here has since been streamlined, refactored, and reorganized for improved readability, reproducibility, and reuse, with assistance from OpenAI's ChatGPT (GPT-5.6 Sol and GPT-6.1 Sol, Max intelligence mode).
 
 Note that this repository includes only the results for the Leaf River Basin and is intended primarily for pedagogical and demonstration purposes. Users interested in reproducing or extending the analyses to the CAMELS-US catchments are encouraged to follow the methodology described in Wang & Gupta (2025) and use the scripts provided in the original [Zenodo](https://doi.org/10.5281/zenodo.15811866).
 
