@@ -780,7 +780,7 @@ Readers should consult the original papers for the formal model names, notation,
 
 This repository provides a consolidated and reproducible collection of MCP neural network variants, including cleaned training and evaluation scripts, checkpoints, and data conventions.
 
-For questions or suggestions, please contact **Yuan-Heng Wang, Ph.D.** at `yhwang0730@gmail.com` or `yhwang0730@arizona.edu`.
+For questions or suggestions, please contact **[Yuan-Heng Wang, Ph.D.](https://www.linkedin.com/in/yuanhengwang/)**  at `yhwang0730@gmail.com` or `yhwang0730@arizona.edu`.
 
 ---
 
